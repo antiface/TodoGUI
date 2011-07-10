@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+# a test change
 import pygtk
 pygtk.require('2.0')
 import gtk
@@ -11,9 +11,8 @@ import time
 import datetime
 import shutil
 
-##first set the directory for the todo files
-TDDIR = "/home/user/Dropbox/todo/"
-
+#set the directory for the todo files
+TDDIR = "/home/katy/Dropbox/todo/"
 #global filename
 filename = os.path.join(TDDIR, "todo.txt")
 donefile = os.path.join(TDDIR, "done.txt")
@@ -26,13 +25,13 @@ shutil.copyfile(donefile, doneback)
 
 priorities = ["(A) ", "(B) ", "(C) ", "(D) ", "(E) "]
 
-#oldtask = "---"
 
-def add_task(task): 
+def add_task(task):
     todo = open(filename, 'a')
     todo.write("\n%s" %(task))
     todo.close()
-        
+
+
 def archive_tasks():
 	to_archive = []
 	# read the data file into a list
@@ -50,7 +49,7 @@ def archive_tasks():
 	done.close()
 	to_archive = [task.rstrip() for task in to_archive]
 	for item in to_archive:
-		for line in fileinput.input(filename,inplace =1):
+		for line in fileinput.input(filename, inplace =1):
 				line = line.strip()
 				if not item in line:
 					print line
@@ -91,8 +90,7 @@ def make_list():
 			
 class Todogui:
 	def __init__(self):
-		
-		
+				
 		make_list()
 		
 		#make the comboboxes
@@ -113,6 +111,7 @@ class Todogui:
 			
 			find_projects()
 			self.project_liststore = gtk.ListStore(str)
+			
 			def refresh_project_list():	
 				for project in projects:
 					self.project_liststore.append([project])
@@ -281,7 +280,7 @@ class Todogui:
 		global oldtask
 		oldtask = task
 		task_editor(task, oldtask)	
-	#global task_complete
+	
 	def task_complete(self, task):
 		if re.match(r'\A\(', task):
 			task = task[4:] 
@@ -359,7 +358,7 @@ class Todogui:
 		self.add_new_context(context_to_add)	
 	def list_tasks(self, task_list):
 		for task in task_list:
-		   self.liststore.append([task])
+			self.liststore.append([task])
 	def refresh_list(self):
 		for line in fileinput.input(filename,inplace =1):
 			line = line.strip()
@@ -375,12 +374,7 @@ class Todogui:
 		self.context_liststore.clear()
 		self.refresh_context_list()
 	def filter_list_priority(self, priority_to_find, task_list):
-		temp_list = task_list
-		filtered = []     
-		for item in temp_list:
-			if item.find(priority_to_find) != -1:
-				filtered.append(item)
-		task_list = filtered
+		task_list = [item for item in task_list if priority_to_find in item]
 		self.liststore.clear()
 		self.list_tasks(task_list)
 	def refreshes_list(self, activate):
@@ -391,12 +385,7 @@ class Todogui:
 		priority_to_find = model.get_value(iter, 0)
 		self.filter_list_priority(priority_to_find, task_list)
 	def filter_list_project(self, project_to_find, task_list):
-		temp_list = task_list
-		filtered = []
-		for item in temp_list:
-			if item.find(project_to_find) != -1:
-				filtered.append(item)
-		task_list = filtered
+		task_list = [item for item in task_list if project_to_find in item]
 		self.liststore.clear()
 		self.list_tasks(task_list)
 	def refresh_project_list(self):	
@@ -411,12 +400,7 @@ class Todogui:
 		if project_to_find != "Filter by project":
 			self.filter_list_project(project_to_find, task_list)
 	def filter_list_context(self, context_to_find, task_list):
-		temp_list = task_list
-		filtered = []
-		for item in temp_list:
-			if item.find(context_to_find) != -1:
-				filtered.append(item)
-		task_list = filtered
+		task_list = [item for item in task_list if context_to_find in item]
 		self.liststore.clear()
 		self.list_tasks(task_list)
 	def refresh_context_list(self):	
