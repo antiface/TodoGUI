@@ -12,7 +12,7 @@ import datetime
 import shutil
 
 #set the directory for the todo files
-TDDIR = "/home/katy/Dropbox/todo/"
+TDDIR = "/home/user/Dropbox/todo/"
 
 #global filename
 filename = os.path.join(TDDIR, "todo.txt")
@@ -177,7 +177,7 @@ class Todogui:
             self.vbox1.pack_start(self.hbox4, False)
             self.vbox1.pack_start(self.hbox5, False)
             self.hbox2.pack_start(self.label, False)
-            self.hbox2.pack_start(self.task_entry, False)
+            self.hbox2.pack_start(self.task_entry, True)
             self.hbox3.pack_start(self.priority_combobox, False)
             self.hbox3.pack_start(self.project_combobox, False)
             self.hbox3.pack_start(self.context_combobox, False)
@@ -242,7 +242,7 @@ class Todogui:
         #b2.connect("clicked", refresh_button, None)
         #b3 = gtk.Button("Archive done tasks")
         #b3.connect("clicked", archive_button, None)
-        self.b4 = gtk.Button("Complete task")
+        self.b4 = gtk.Button("Complete selected task")
 
         priorityCombo("Filter by priority")
         projectCombo("Filter by project")
@@ -256,11 +256,11 @@ class Todogui:
         self.hbox2.pack_start(self.priority_combobox, False)
         self.hbox2.pack_start(self.project_combobox, False)
         self.hbox2.pack_start(self.context_combobox, False)
-        self.hbox2.pack_start(self.search_tasks, False)
+        self.hbox2.pack_start(self.search_tasks, True)
         self.hbox3.pack_start(self.b1, False)
         self.hbox3.pack_start(self.b4, False)
         self.hbox4.pack_start(self.addlabel, False)
-        self.hbox4.pack_start(self.quickadd, False)
+        self.hbox4.pack_start(self.quickadd, True)
         self.vbox1.pack_start(self.scroll1)
 
         self.window.add(self.hbox1)
@@ -399,6 +399,9 @@ class Todogui:
         task_list = [item for item in task_list if priority_to_find in item]
         self.liststore.clear()
         self.list_tasks(task_list)
+        self.project_combobox.set_active(0)
+        self.context_combobox.set_active(0)
+        self.search_tasks.set_text("Search tasks")
 
     def refreshes_list(self, activate):
         self.refresh_list()
@@ -413,6 +416,9 @@ class Todogui:
         task_list = [item for item in task_list if project_to_find in item]
         self.liststore.clear()
         self.list_tasks(task_list)
+        self.context_combobox.set_active(0)
+        self.priority_combobox.set_active(0)
+        self.search_tasks.set_text("Search tasks")
 
     def refresh_project_list(self):
         for project in projects:
@@ -431,6 +437,9 @@ class Todogui:
         task_list = [item for item in task_list if context_to_find in item]
         self.liststore.clear()
         self.list_tasks(task_list)
+        self.project_combobox.set_active(0)
+        self.priority_combobox.set_active(0)
+        self.search_tasks.set_text("Search tasks")
 
     def refresh_context_list(self):
         for context in contexts:
@@ -454,6 +463,9 @@ class Todogui:
         task_list = filtered
         self.liststore.clear()
         self.list_tasks(task_list)
+        self.context_combobox.set_active(0)
+        self.priority_combobox.set_active(0)
+        self.project_combobox.set_active(0)
 
     def searchtasks(self, widget):
         tofind = self.search_tasks.get_text()
